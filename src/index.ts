@@ -6,6 +6,7 @@ void connectDb()
 
 const server = new Server()
 server.execute()
+
 server.app.listen(server.port, () => {
   console.log('server started in http://localhost:8080')
 })
