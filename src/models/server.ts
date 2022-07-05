@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import restaurantRouter from '../routes/restaurant'
 
 class Server {
   app: express.Application
@@ -13,6 +14,9 @@ class Server {
   middleware (): void {
     this.app.use(cors())
     this.app.use(express.json())
+
+    // End points
+    this.app.use('/api/restaurant', restaurantRouter)
   }
 
   execute (): void {
