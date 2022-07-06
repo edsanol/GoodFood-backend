@@ -1,4 +1,4 @@
-import { NewRestaurantModel } from '../utils/types'
+import { NewRestaurantModel, newCategoryModel, UpdateRestaurantModel, newFoodModel, UpdateFoodModel } from '../utils/types'
 
 const parseString = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -60,5 +60,46 @@ export const toNewRestaurantEntry = (Object: any): NewRestaurantModel => {
     city: parseString(Object.city),
     state: parseState(Object.state),
     logo: parseLogo(Object.logo)
+  }
+}
+
+export const toUpdateRestaurantEntry = (Object: any): UpdateRestaurantModel => {
+  return {
+    admin: parseString(Object.admin),
+    name: parseString(Object.name),
+    phone: parseString(Object.phone),
+    address: parseString(Object.address),
+    city: parseString(Object.city),
+    logo: parseLogo(Object.logo)
+  }
+}
+
+export const toNewCategory = (Object: any): newCategoryModel => {
+  return {
+    name: parseString(Object.name),
+    description: parseString(Object.description),
+    image: parseLogo(Object.image)
+  }
+}
+
+export const toNewFood = (Object: any): newFoodModel => {
+  return {
+    restaurantId: Object.uid,
+    categoryId: Object.categoryId,
+    name: parseString(Object.name),
+    description: parseString(Object.description),
+    price: parseString(Object.price),
+    image: parseLogo(Object.image),
+    rating: parseString(Object.rating)
+  }
+}
+
+export const toUpdateFood = (Object: any): UpdateFoodModel => {
+  return {
+    name: parseString(Object.name),
+    description: parseString(Object.description),
+    price: parseString(Object.price),
+    image: Object.image,
+    rating: parseString(Object.rating)
   }
 }

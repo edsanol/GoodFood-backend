@@ -1,8 +1,9 @@
 import { model, Schema, Document } from 'mongoose'
+import { FoodModel } from './food.model'
 
 export interface RestaurantModel extends Document {
   id: string
-  foodId: string[]
+  foodId: FoodModel[]
   admin: string
   name: string
   email: string
@@ -18,9 +19,7 @@ export interface RestaurantModel extends Document {
 }
 
 const restaurantSchema = new Schema({
-  foodId: {
-    type: String
-  },
+  foodId: [{ type: Schema.Types.ObjectId, ref: 'Food' }],
   admin: {
     type: String,
     required: true
