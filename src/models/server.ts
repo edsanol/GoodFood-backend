@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import restaurantRouter from '../routes/restaurant'
+import categoryRouter from '../routes/category'
+import foodRouter from '../routes/food'
 
 class Server {
   app: express.Application
@@ -17,6 +19,8 @@ class Server {
 
     // End points
     this.app.use('/api/restaurant', restaurantRouter)
+    this.app.use('/api/category', categoryRouter)
+    this.app.use('/api/food', foodRouter)
   }
 
   execute (): void {
