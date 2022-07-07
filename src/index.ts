@@ -1,5 +1,5 @@
-import Server from './models/server'
 import dotenv from 'dotenv'
+import Server from './models/server'
 import { connectDb } from './db'
 dotenv.config()
 void connectDb()

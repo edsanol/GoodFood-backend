@@ -89,8 +89,6 @@ export const updateCategory = async (req: Request, res: Response): Promise<void>
       throw new Error('the category does not exist here')
     }
 
-    // TODO: Validar si el token proviene de un usuario autorizado
-
     const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
     if (!restaurant) {
       throw new Error('the restaurant does not exist here')

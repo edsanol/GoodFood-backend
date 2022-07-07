@@ -3,6 +3,8 @@ import cors from 'cors'
 import restaurantRouter from '../routes/restaurant'
 import categoryRouter from '../routes/category'
 import foodRouter from '../routes/food'
+import dinerRouter from '../routes/diner'
+import orderRouter from '../routes/order'
 
 class Server {
   app: express.Application
@@ -21,6 +23,8 @@ class Server {
     this.app.use('/api/restaurant', restaurantRouter)
     this.app.use('/api/category', categoryRouter)
     this.app.use('/api/food', foodRouter)
+    this.app.use('/api/diner', dinerRouter)
+    this.app.use('/api/order', orderRouter)
   }
 
   execute (): void {
