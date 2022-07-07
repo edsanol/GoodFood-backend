@@ -1,4 +1,4 @@
-import { NewRestaurantModel, newCategoryModel, UpdateRestaurantModel, newFoodModel, UpdateFoodModel } from '../utils/types'
+import { NewRestaurantModel, newCategoryModel, UpdateRestaurantModel, newFoodModel, UpdateFoodModel, NewDinerModel, UpdateDinerModel, NewOrderModel } from '../utils/types'
 
 const parseString = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -101,5 +101,34 @@ export const toUpdateFood = (Object: any): UpdateFoodModel => {
     price: parseString(Object.price),
     image: Object.image,
     rating: parseString(Object.rating)
+  }
+}
+
+export const toNewDiner = (Object: any): NewDinerModel => {
+  return {
+    name: parseString(Object.name),
+    email: parseEmail(Object.email),
+    password: parsePassword(Object.password),
+    phone: parseString(Object.phone),
+    address: parseString(Object.address),
+    city: parseString(Object.city)
+  }
+}
+
+export const toUpdateDiner = (Object: any): UpdateDinerModel => {
+  return {
+    name: parseString(Object.name),
+    phone: parseString(Object.phone),
+    address: parseString(Object.address),
+    city: parseString(Object.city)
+  }
+}
+
+export const toNewOrderEntry = (Object: any): NewOrderModel => {
+  return {
+    dinerId: Object.dinerId,
+    restaurantId: Object.restaurantId,
+    foodId: Object.foodId,
+    detail: Object.detail
   }
 }
