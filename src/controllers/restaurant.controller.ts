@@ -74,6 +74,33 @@ export const restaurantLogin = async (req: Request, res: Response): Promise<void
   }
 }
 
+export const tokenRevalidate = async (req: RequestWithId, res: Response): Promise<void> => {
+  const { uid }: any = req
+
+  try {
+    const restaurantFromDB: RestaurantModel | null = await Restaurant.findById(uid)
+    if (!restaurantFromDB) {
+      throw new Error('the restaurant does not exist')
+    }
+
+    // Generar el JWT
+    const token = await JWTgenerator(restaurantFromDB.id)
+
+    res.json({
+      ok: true,
+      message: 'token revalidated',
+      token,
+      uid
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      ok: false,
+      message: 'Incorrect Sesion',
+      data: error.message
+    })
+  }
+}
+
 export const listRestaurants = async (_req: Request, res: Response): Promise<void> => {
   // TODO: Implementar listar restaurantes mientras el usuario tenga token ********
 
