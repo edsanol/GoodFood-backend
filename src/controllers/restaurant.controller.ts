@@ -23,12 +23,14 @@ export const registerRestaurants = async (req: Request, res: Response): Promise<
     const encryptPassword = await bcrypt.hash(newRestaurants.password, 8)
     const restaurant: RestaurantModel = await Restaurant.create({ ...newRestaurants, password: encryptPassword })
 
+    const restaurantFromDB: RestaurantModel | null = await Restaurant.findById(restaurant.id).select('-password -createdAt -updatedAt')
+
     // Generar el JWT
     const token = await JWTgenerator(restaurant.id)
     res.status(200).json({
       ok: true,
       message: 'User created',
-      data: restaurant,
+      data: restaurantFromDB,
       token
     })
   } catch (error: any) {
@@ -45,7 +47,7 @@ export const restaurantLogin = async (req: Request, res: Response): Promise<void
 
   try {
     // Verificar si existe el correo
-    const restaurantFromDB: RestaurantModel | null = await Restaurant.findOne({ email })
+    const restaurantFromDB: RestaurantModel | null = await Restaurant.findOne({ email }).select('-password -createdAt -updatedAt')
     if (!restaurantFromDB) {
       throw new Error('the email does not exist')
     }
@@ -78,7 +80,7 @@ export const tokenRevalidate = async (req: RequestWithId, res: Response): Promis
   const { uid }: any = req
 
   try {
-    const restaurantFromDB: RestaurantModel | null = await Restaurant.findById(uid)
+    const restaurantFromDB: RestaurantModel | null = await Restaurant.findById(uid).select('-password -createdAt -updatedAt')
     if (!restaurantFromDB) {
       throw new Error('the restaurant does not exist')
     }
@@ -90,7 +92,7 @@ export const tokenRevalidate = async (req: RequestWithId, res: Response): Promis
       ok: true,
       message: 'token revalidated',
       token,
-      uid
+      data: restaurantFromDB
     })
   } catch (error: any) {
     res.status(500).json({
@@ -126,7 +128,7 @@ export const showOneRestaurant = async (req: Request, res: Response): Promise<vo
   // TODO: Implementar listar restaurantes mientras el usuario tenga token ********
   const { id }: any = req.params
   try {
-    const restaurant: RestaurantModel | null = await Restaurant.findById(id)
+    const restaurant: RestaurantModel | null = await Restaurant.findById(id).select('-password -createdAt -updatedAt')
     if (!restaurant) {
       throw new Error('the restaurant does not exist here')
     }
@@ -160,7 +162,7 @@ export const updateRestaurant = async (req: RequestWithId, res: Response): Promi
       new: true,
       runValidators: true,
       context: 'query'
-    })
+    }).select('-password -createdAt -updatedAt')
     res.status(200).json({
       ok: true,
       message: 'Restaurant updated',
