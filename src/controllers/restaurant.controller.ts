@@ -47,10 +47,12 @@ export const restaurantLogin = async (req: Request, res: Response): Promise<void
 
   try {
     // Verificar si existe el correo
-    const restaurantFromDB: RestaurantModel | null = await Restaurant.findOne({ email }).select('-password -createdAt -updatedAt')
+    const restaurantFromDB: RestaurantModel | null = await Restaurant.findOne({ email })
     if (!restaurantFromDB) {
       throw new Error('the email does not exist')
     }
+
+    const restaurant: RestaurantModel | null = await await Restaurant.findById(restaurantFromDB.id).select('-password -createdAt -updatedAt')
 
     // Validar el password
     const validPassword = bcrypt.compareSync(password, restaurantFromDB.password)
@@ -63,7 +65,7 @@ export const restaurantLogin = async (req: Request, res: Response): Promise<void
 
     res.json({
       ok: true,
-      restaurant: restaurantFromDB,
+      restaurant: restaurant,
       token,
       message: 'Restaurant logged'
     })

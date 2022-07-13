@@ -77,6 +77,33 @@ export const showAllFoods = async (req: RequestWithId, res: Response): Promise<v
   }
 }
 
+export const showAllFoodsByRestaurant = async (req: RequestWithId, res: Response): Promise<void> => {
+  try {
+    const { uid }: any = req
+
+    // TODO: Validar también con el token del usuario
+
+    const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
+    if (!restaurant) {
+      throw new Error('the restaurant does not exist here')
+    }
+
+    const foods: FoodModel[] = await Food.find({ restaurantId: restaurant.id })
+
+    res.status(200).json({
+      ok: true,
+      message: 'Food found',
+      data: foods
+    })
+  } catch (error: any) {
+    res.status(404).json({
+      ok: false,
+      message: 'Food coult not be found',
+      data: error.message
+    })
+  }
+}
+
 export const showOneFood = async (req: RequestWithId, res: Response): Promise<void> => {
   try {
     const { uid }: any = req

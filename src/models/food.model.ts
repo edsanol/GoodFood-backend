@@ -42,7 +42,8 @@ const foodSchema = new Schema({
     required: true
   },
   rating: {
-    type: String
+    type: String,
+    default: '-'
   },
   price: {
     type: String,
