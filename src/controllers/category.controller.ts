@@ -3,6 +3,7 @@ import { RequestWithId } from '../middlewares/validate-jwt'
 import { toNewCategory } from '../middlewares/validateFields'
 import Category, { CategoryModel } from '../models/category.model'
 import Restaurant, { RestaurantModel } from '../models/restaurant.model'
+import Diner, { DinerModel } from '../models/diner.model';
 
 export const createCategory = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -28,13 +29,13 @@ export const showAllCategory = async (req: RequestWithId, res: Response): Promis
   try {
     const { uid }: any = req
     const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
-    if (!restaurant) {
-      throw new Error('the restaurant does not exist here')
+
+    const dinerFromDB: DinerModel | null = await Diner.findById(uid)
+    if (!dinerFromDB && !restaurant) {
+      throw new Error('access denied')
     }
 
-    // TODO: verificar tambien el token del usuario
-
-    const categories: CategoryModel[] = await Category.find()
+    const categories: CategoryModel[] = await Category.find().select('-createdAt -updatedAt')
 
     res.status(200).json({
       ok: true,

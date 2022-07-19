@@ -67,7 +67,34 @@ export const DinerLogin = async (req: Request, res: Response): Promise<void> => 
   } catch (error: any) {
     res.status(404).json({
       ok: false,
-      message: 'Diner coult not be logged',
+      message: 'User or password incorrect',
+      data: error.message
+    })
+  }
+}
+
+export const tokenRevalidate = async (req: RequestWithId, res: Response): Promise<void> => {
+  const { uid }: any = req
+
+  try {
+    const dinerFromDB: DinerModel | null = await Diner.findById(uid).select('-password -createdAt -updatedAt')
+    if (!dinerFromDB) {
+      throw new Error('the diner does not exist')
+    }
+
+    // Generar el JWT
+    const token = await JWTgenerator(dinerFromDB.id)
+
+    res.json({
+      ok: true,
+      message: 'token revalidated',
+      token,
+      data: dinerFromDB
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      ok: false,
+      message: 'Incorrect Sesion',
       data: error.message
     })
   }

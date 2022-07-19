@@ -13,7 +13,7 @@ export interface CategoryModel extends Document {
 
 const categorySchema = new Schema({
   foodId: [{
-    type: Schema.Types.ObjectId,
+    type: Array,
     ref: 'Food'
   }],
   name: {
