@@ -6,6 +6,7 @@ import Restaurant, { RestaurantModel } from '../models/restaurant.model'
 import { RequestWithId } from '../middlewares/validate-jwt'
 import Food, { FoodModel } from '../models/food.model'
 import Category from '../models/category.model'
+import Diner, { DinerModel } from '../models/diner.model';
 
 export const registerRestaurants = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -105,10 +106,14 @@ export const tokenRevalidate = async (req: RequestWithId, res: Response): Promis
   }
 }
 
-export const listRestaurants = async (_req: Request, res: Response): Promise<void> => {
-  // TODO: Implementar listar restaurantes mientras el usuario tenga token ********
+export const listRestaurants = async (req: RequestWithId, res: Response): Promise<void> => {
+  const { uid }: any = req
 
   try {
+    const dinerFromDB: DinerModel | null = await Diner.findById(uid)
+    if (!dinerFromDB) {
+      throw new Error('access denied')
+    }
     const restaurants: RestaurantModel[] = await Restaurant.find().select('-password -createdAt -updatedAt')
     res.status(200).json({
       ok: true,

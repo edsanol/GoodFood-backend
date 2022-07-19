@@ -21,7 +21,7 @@ export interface RestaurantModel extends Document {
 }
 
 const restaurantSchema = new Schema({
-  foodId: [{ type: Schema.Types.ObjectId, ref: 'Food' }],
+  foodId: [{ type: Array, ref: 'Food' }],
   orderId: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
   admin: {
     type: String,
