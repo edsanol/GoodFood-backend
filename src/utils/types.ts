@@ -16,4 +16,4 @@ export type UpdateFoodModel = Pick<FoodModel, 'name' | 'description' | 'image' |
 export type NewDinerModel = Pick<DinerModel, 'name' | 'email' | 'password' | 'phone' | 'address' | 'city' >
 export type UpdateDinerModel = Pick<DinerModel, 'name' | 'phone' | 'address' | 'city' >
 
-export type NewOrderModel = Pick<OrderModel, 'dinerId' | 'restaurantId' | 'foodId' | 'detail' >
+export type NewOrderModel = Pick<OrderModel, 'dinerId' | 'restaurantId' | 'detail' >

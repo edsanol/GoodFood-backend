@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import { JWTgenerator } from '../utils/jwt'
 import { toNewDiner, toUpdateDiner } from '../middlewares/validateFields'
 import { RequestWithId } from '../middlewares/validate-jwt'
+import Restaurant, { RestaurantModel } from '../models/restaurant.model';
 
 export const registerDiner = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -100,15 +101,41 @@ export const tokenRevalidate = async (req: RequestWithId, res: Response): Promis
   }
 }
 
+export const showAllDiners = async (req: RequestWithId, res: Response): Promise<void> => {
+  const { uid }: any = req
+
+  try {
+    const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
+    
+    if (!restaurant) {
+      throw new Error('you can not see orders because you are not a diner or a restaurant')
+    }
+    const diner: DinerModel[] = await Diner.find()
+
+    res.status(200).json({
+      ok: true,
+      message: 'Diner found',
+      data: diner
+    })
+  } catch (error: any) {
+    res.status(404).json({
+      ok: false,
+      message: 'Diner coult not be found',
+      data: error.message
+    })
+  }
+}
+
 export const showOneDiner = async (req: RequestWithId, res: Response): Promise<void> => {
   const { id } = req.params
   const { uid }: any = req
 
   try {
     const diner: DinerModel | null = await Diner.findById(id)
+    const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
 
-    if (!diner || diner.id !== uid) {
-      throw new Error('the diner does not exist')
+    if (!diner && !restaurant) {
+      throw new Error('you can not see orders because you are not a diner or a restaurant')
     }
 
     res.status(200).json({

@@ -128,7 +128,6 @@ export const toNewOrderEntry = (Object: any): NewOrderModel => {
   return {
     dinerId: Object.dinerId,
     restaurantId: Object.restaurantId,
-    foodId: Object.foodId,
     detail: Object.detail
   }
 }
