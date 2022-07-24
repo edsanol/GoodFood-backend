@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const validate_jwt_1 = require("../middlewares/validate-jwt");
+const order_controller_1 = require("../controllers/order.controller");
+const router = (0, express_1.Router)();
+router.route('/').post(validate_jwt_1.validateJWT, order_controller_1.createOrder);
+router.route('/').get(validate_jwt_1.validateJWT, order_controller_1.showAllOrders);
+router.route('/:id').get(validate_jwt_1.validateJWT, order_controller_1.showOneOrder);
+router.route('/success/:id').put(validate_jwt_1.validateJWT, order_controller_1.updateSuccesOrder);
+exports.default = router;
