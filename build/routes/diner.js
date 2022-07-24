@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const diner_controller_1 = require("../controllers/diner.controller");
+const validate_jwt_1 = require("../middlewares/validate-jwt");
+const router = (0, express_1.Router)();
+router.route('/register').post(diner_controller_1.registerDiner);
+router.route('/login').post(diner_controller_1.DinerLogin);
+router.route('/renew').get(validate_jwt_1.validateJWT, diner_controller_1.tokenRevalidate);
+router.route('/').get(validate_jwt_1.validateJWT, diner_controller_1.showAllDiners);
+router.route('/:id').get(validate_jwt_1.validateJWT, diner_controller_1.showOneDiner);
+router.route('/:id').put(validate_jwt_1.validateJWT, diner_controller_1.updateDiner);
+router.route('/:id').delete(validate_jwt_1.validateJWT, diner_controller_1.destroyDiner);
+exports.default = router;
