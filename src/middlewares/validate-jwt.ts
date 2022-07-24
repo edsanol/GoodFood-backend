@@ -7,7 +7,6 @@ export interface RequestWithId extends Request {
 
 export const validateJWT = (req: RequestWithId, res: Response, next: NextFunction): any => {
   const token: string | undefined = req.header('x-token')
-
   if (!token) {
     return res.status(401).json({
       ok: false,

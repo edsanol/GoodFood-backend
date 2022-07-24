@@ -21,3 +21,15 @@ export const JWTgenerator = async (id: string): Promise<any> => {
     )
   })
 }
+
+export const checkJWT = (token = '') => {
+  try {
+    const { id }: any = jwt.verify(
+      token,
+      process.env.JWT_KEY as any
+    );
+    return [true, id];
+  } catch (error) {
+    return [false, null];
+  }
+};

@@ -7,6 +7,7 @@ export interface OrderModel extends Document {
   dinerId: DinerModel
   restaurantId: RestaurantModel
   detail: any[]
+  success: boolean
 }
 
 const orderSchema = new Schema({
@@ -23,6 +24,10 @@ const orderSchema = new Schema({
   detail: {
     type: Array,
     required: true
+  },
+  success: {
+    type: Boolean,
+    default: false
   }
 },
 {

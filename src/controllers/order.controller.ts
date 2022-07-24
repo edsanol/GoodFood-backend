@@ -4,13 +4,12 @@ import Restaurant, { RestaurantModel } from '../models/restaurant.model'
 import Order, { OrderModel } from '../models/order.model'
 import { toNewOrderEntry } from '../middlewares/validateFields'
 import Diner, { DinerModel } from '../models/diner.model'
-import Food, { FoodModel } from '../models/food.model'
 
 export const createOrder = async (req: RequestWithId, res: Response): Promise<void> => {
   const { uid }: any = req
 
   try {
-    const { dinerId, restaurantId, foodId }: any = req.body
+    const { dinerId, restaurantId }: any = req.body
 
     const restaurant: RestaurantModel | null = await Restaurant.findById(restaurantId)
     if (!restaurant) {
@@ -20,11 +19,6 @@ export const createOrder = async (req: RequestWithId, res: Response): Promise<vo
     const diner: DinerModel | null = await Diner.findById(dinerId)
     if (!diner || diner.id !== uid) {
       throw new Error('the diner does not exist here')
-    }
-
-    const food: FoodModel | null = await Food.findById(foodId)
-    if (!food) {
-      throw new Error('the food does not exist here')
     }
 
     const newOrder = await toNewOrderEntry(req.body)
@@ -37,12 +31,6 @@ export const createOrder = async (req: RequestWithId, res: Response): Promise<vo
     })
 
     await restaurant.updateOne({
-      $push: {
-        orderId: order
-      }
-    })
-
-    await food.updateOne({
       $push: {
         orderId: order
       }
@@ -114,6 +102,38 @@ export const showOneOrder = async (req: RequestWithId, res: Response): Promise<v
     res.status(404).json({
       ok: false,
       message: 'Order coult not be found',
+      data: error.message
+    })
+  }
+}
+
+export const updateSuccesOrder = async (req: RequestWithId, res: Response) => {
+  try {
+    const { uid }: any = req
+    const { id }: any = req.params
+    const { data }: any = req.body
+    const restaurant: RestaurantModel | null = await Restaurant.findById(uid)
+    if (!restaurant) {
+      throw new Error('you can not see orders because you are not a restaurant')
+    }
+
+    const order: OrderModel | null = await Order.findById(id)
+    if (!order) {
+      throw new Error('the order does not exist here')
+    }
+
+    order.success = data
+    await order.save()
+
+    res.status(200).json({
+      ok: true,
+      message: 'Order updated',
+      data: order
+    })
+  } catch (error: any) {
+    res.status(404).json({
+      ok: false,
+      message: 'Order coult not be updated',
       data: error.message
     })
   }
